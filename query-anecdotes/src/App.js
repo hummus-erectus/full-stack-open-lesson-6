@@ -9,6 +9,10 @@ const App = () => {
   const dispatch = useNotificationDispatch()
 
   const newAnecdoteMutation = useMutation(createAnecdote, {
+    onError: () => {
+      dispatch({type:'NEW', payload: `Anecdotes must be five characters or more`})
+      setTimeout(() => dispatch({type:'REMOVE'}), 5000)
+    },
     onSuccess: (newAnecdote) => {
       const anecdotes = queryClient.getQueryData('anecdotes')
       queryClient.setQueryData('anecdotes', anecdotes.concat(newAnecdote))
